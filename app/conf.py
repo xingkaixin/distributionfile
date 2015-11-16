@@ -3,20 +3,20 @@
 
 import os
 
+
 def load_config():
-    mode = os.getenv('ENV','DEVELOPMENT')
-    if mode=='PRODUCTION':
+    mode = os.getenv('ENV', 'DEVELOPMENT')
+    if mode == 'PRODUCTION':
         return Production
+    elif mode == 'TEST':
+        return Test
     else:
         return Development
-
-
 
 
 class Config(object):
     DB_ENGINE = 'sqlite:///server.db'
     WATCH_PATH = '/Users/Kevin/workspace/distributionfile/data'
-    DEST_PATH = '/Users/Kevin/workspace/distributionfile/fakehub/{filename}'
     PENDING_TIME = 2
 
     LOGFILE = 'log/sysout.log'
@@ -30,9 +30,12 @@ class Config(object):
     CELERY_TIMEZONE = 'Asia/Shanghai'
 
 
-
 class Development(Config):
     pass
+
+
+class Test(Config):
+    DB_ENGINE = os.getenv('DWCONN')
 
 
 class Production(Config):

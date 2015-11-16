@@ -7,13 +7,13 @@ from sqlalchemy import (
     Integer,
     Column,
     String,
-    DateTime
+    DateTime,
 )
 
 
 class FileRouteModule(Base):
 
-    __tablename__ = 't_file_route'
+    __tablename__ = 'app_file_route'
 
     id = Column(Integer, primary_key=True)
     src_path = Column(String(100))
@@ -29,4 +29,4 @@ class FileRouteModule(Base):
     tar_name = Column(String(100))
 
     def __repr__(self):
-        return 'FileRouteModule {file_path}/{file_name}.{file_ext}'.format(file_path=self.src_path, file_name=self.src_name,file_ext=self.src_extension)
+        return 'FileRouteModule {file_path}/{file_name}.{file_ext}'.format(file_path=self.src_path, file_name=self.src_name, file_ext=self.src_extension)

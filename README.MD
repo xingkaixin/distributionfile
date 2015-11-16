@@ -8,16 +8,18 @@
 
 
 
-
+# Wathdog
+python dogserver.py
 
 # Celery
-
 
 celery worker -A worker.celery  -P gevent -c 1000 --loglevel=info -n worker1
 celery worker -A worker.celery  -P gevent -c 1000 --loglevel=info -n worker2
 celery worker -A worker.celery  -P gevent -c 1000 --loglevel=info -n worker3
 celery worker -A worker.celery  -P gevent -c 1000 --loglevel=info -n worker4
 
+# celery beat
+celery beat -A worker.celery
 
 # Celery flower
 celery flower -A worker.celery --address=127.0.0.1
