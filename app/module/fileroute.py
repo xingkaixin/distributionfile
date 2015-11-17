@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from __future__ import absolute_import
+from __future__ import unicode_literals
 from module import Base
 from sqlalchemy import (
     Integer,
@@ -27,6 +27,8 @@ class FileRouteModule(Base):
     valid_to = Column(DateTime)
     tar_path = Column(String(100))
     tar_name = Column(String(100))
+    transtype = Column(String(100))
+    ftpname = Column(String(100))
 
     def __repr__(self):
         return 'FileRouteModule {file_path}/{file_name}.{file_ext}'.format(file_path=self.src_path, file_name=self.src_name, file_ext=self.src_extension)

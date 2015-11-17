@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
 from conf import load_config
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
 import sys
 import os
 from celery import Celery
@@ -9,6 +10,11 @@ from celery import platforms
 
 reload(sys)
 sys.path.append(os.path.join(os.path.dirname(__file__), "./"))
+
+default_encoding = 'utf-8'
+if sys.getdefaultencoding() != default_encoding:
+    reload(sys)
+    sys.setdefaultencoding(default_encoding)
 
 celery = Celery('PinPin',)
 
@@ -55,7 +61,7 @@ def _CheckFile(filepath, filesize=0):
         f = FileRoute(filepath)
         try:
             logger.info('Check is is watchfile?')
-            dest_path, filename = f.routeInfo()
+            transtype, ftpname, dest_path, filename = f.routeInfo()
             logger.info('{filepath} is our file'.format(filepath=filepath))
             q = DogQueue()
             q.add(filepath)
@@ -77,7 +83,11 @@ def _CheckFile(filepath, filesize=0):
 
 @celery.task(name="UploadFile")
 def UploadFile(filepath):
-    import shutil
+    # import shutil
+    from tools.ftptools import (
+        FTPInfo,
+        StandardFTPFactory
+    )
 
     q = DogQueue()
     q.doing(filepath)
@@ -85,11 +95,34 @@ def UploadFile(filepath):
     try:
         logger.info('Send file to route')
 
-        dest_path, filename = f.routeInfo()
+        transtype, ftpname, dest_path, filename = f.routeInfo()
         logger.info('Copy file {filepath} Begin'.format(filepath=filepath))
-        shutil.copyfile(filepath, os.path.join(dest_path, filename))
+
+        info = FTPInfo().get_info(ftpname)
+
+        host = info.get('host', None)
+        port = info.get('port', 22)
+        username = info.get('username', None)
+        password = info.get('password', None)
+        key = info.get('key', None)
+
+        f = StandardFTPFactory.get_factory(transtype)
+        c = f.get_client(host, port, username, password, key)
+
+        local = filepath
+        remote = os.path.join(dest_path, filename)
+        temp = os.path.join(dest_path, filename + '.transfering')
+
+        c.put(local, temp)
+        c.rename(temp, remote)
+        c.close()
+
+        os.remove(filepath)
+
+        # shutil.copyfile(filepath, os.path.join(dest_path, filename))
         q.done(filepath)
     except TypeError:
+        q.done(filepath)
         logger.info('{filepath} is not our file'.format(filepath=filepath))
         return False
     except:

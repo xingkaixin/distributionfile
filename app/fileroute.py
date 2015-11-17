@@ -6,6 +6,13 @@ from module.fileroute import FileRouteModule
 from module import DBSession
 import arrow
 from core import logger
+from tools.retools import getKeyName
+import sys
+
+default_encoding = 'utf-8'
+if sys.getdefaultencoding() != default_encoding:
+    reload(sys)
+    sys.setdefaultencoding(default_encoding)
 
 
 class FileRoute(object):
@@ -16,6 +23,8 @@ class FileRoute(object):
     _f = None
     _ext = None
 
+    transtype = None
+    ftpname = None
     tar_path = None
     tar_name = None
 
@@ -32,17 +41,39 @@ class FileRoute(object):
         logger.debug('Path:{path} File:{file}.{ext}'.format(
             path=self._p, file=self._f, ext=self._ext))
 
-        f = session.query(FileRouteModule).filter(FileRouteModule.src_path == self._p,
-                                                  FileRouteModule.src_name == self._f, FileRouteModule.src_extension == self._ext).first()
-        logger.debug(f)
-        if f is None:
-            self.blocked = True
+        tempate_f = getKeyName(self._f)
+
+        if tempate_f:
+            try:
+                f = session.query(FileRouteModule).filter(FileRouteModule.src_path == self._p,
+                                                          FileRouteModule.src_name == tempate_f, FileRouteModule.src_extension == self._ext).first()
+                logger.debug(f)
+                if f is None:
+                    self.blocked = True
+                else:
+                    self.blocked = False
+                    self.tar_path = f.tar_path
+                    utcdt = arrow.utcnow().to('local')
+                    file_timestamp = f.tar_name.format(YMD=utcdt.format(
+                        'YYYYMMDD'), YM=utcdt.format('YYYYMM'))
+                    try:
+                        file_timestamp = file_timestamp.decode('gbk')
+                    except UnicodeDecodeError:
+                        file_timestamp = unicode(file_timestamp).decode('gbk')
+                    logger.debug(file_timestamp)
+                    self.tar_name = '{filename}.{ext}'.format(
+                        filename=file_timestamp, ext=f.src_extension)
+                    self.transtype = f.transtype
+                    self.ftpname = f.ftpname
+            except:
+                session.close()
+                raise
+            else:
+                session.close()
         else:
-            self.blocked = False
-            self.tar_path = f.tar_path
-            utcdt = arrow.utcnow().to('local')
-            self.tar_name = f.tar_name.format(YMD=utcdt.format(
-                'YYYYMMDD'), YM=utcdt.format('YYYYMM')) + '.' + self._ext
+            self.blocked = True
+            logger.debug(
+                'thi file name [{filename}] can re'.format(filename=self._f))
 
     def routeInfo(self):
         self._blocked()
@@ -50,4 +81,4 @@ class FileRoute(object):
             return None
         logger.debug('Tar Path:{path},Tar File:{file}'.format(
             file=self.tar_name, path=self.tar_path))
-        return self.tar_path, self.tar_name
+        return self.transtype, self.ftpname, self.tar_path, self.tar_name

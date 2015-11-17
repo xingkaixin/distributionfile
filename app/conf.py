@@ -36,6 +36,7 @@ class Development(Config):
 
 class Test(Config):
     DB_ENGINE = os.getenv('DWCONN')
+    WATCH_PATH = '/home/boe/output'
 
 
 class Production(Config):
