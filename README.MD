@@ -58,6 +58,10 @@ dd if=/dev/zero of=1.file bs=1024 count=0 seek=$[1024*1000*3]
 │   │   ├── __init__.py
 │   │   └── retools.py
 │   └── worker.py
+├── bin
+│   ├── beat.sh
+│   ├── worker.sh
+│   └── dog.sh
 ├── fabfile.py
 ├── ftp.conf
 ├── ftp.conf.sample
