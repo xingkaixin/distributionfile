@@ -12,6 +12,7 @@ env.hosts = ['10.8.4.116']
 def pack():
     tar_files = ['*.conf','*.py','requirements.txt']
     tar_files.append('app/*')
+    tar_files.append('bin/*.sh')
     local('rm -f www.tar.gz')
     local('tar -czvf www.tar.gz --exclude=\'*.tar.gz\' --exclude=\'.DS_Store\' --exclude=\'._.DS_Store\' --exclude=\'*.pyc\' --exclude=\'*.db\' --exclude=\'README.MD\' --exclude=\'*.log\' --exclude=\'fabfile.py\' %s' %
           ' '.join(tar_files))
