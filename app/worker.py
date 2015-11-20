@@ -81,6 +81,33 @@ def _CheckFile(filepath, filesize=0):
     return _CheckFile(filepath, newsize)
 
 
+def pendingFile(filepath, filesize=0):
+    logger.info('pendingFile........')
+    from os.path import getsize
+
+    newsize = getsize(filepath)
+
+    logger.info('{filepath} size is {size}'.format(
+        filepath=filepath, size=newsize))
+    if newsize == filesize and newsize > 0:
+        try:
+            logger.info('This is is watch file?')
+            f = FileRoute(filepath)
+            transtype, ftpname, dest_path, filename = f.routeInfo()
+            return True
+        except TypeError:
+            logger.info('{filepath} is not watch file'.format(
+                filepath=filepath))
+            return False
+        except:
+            logger.exception('pendingFile')
+            return False
+    logger.info('File is not Ok,pending {pendingtime} seconds'.format(
+        pendingtime=conf.PENDING_TIME))
+    time.sleep(conf.PENDING_TIME)
+    return pendingFile(filepath, newsize)
+
+
 @celery.task(name="UploadFile")
 def UploadFile(filepath):
     # import shutil
@@ -91,6 +118,8 @@ def UploadFile(filepath):
 
     q = DogQueue()
     q.doing(filepath)
+
+    pendingFile(filepath)
     f = FileRoute(filepath)
     try:
         logger.info('Send file to route')

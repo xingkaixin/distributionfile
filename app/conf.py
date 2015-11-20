@@ -40,4 +40,5 @@ class Test(Config):
 
 
 class Production(Config):
-    pass
+    DB_ENGINE = os.getenv('DWCONN')
+    WATCH_PATH = '/home/boe/output'

@@ -5,10 +5,8 @@ import time
 from conf import load_config
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from worker import CheckFile
 from core import logger
 from queueapp import DogQueue
-
 
 
 import sys
@@ -31,7 +29,6 @@ class MyFileMonitor(FileSystemEventHandler):
             logger.info("created name:[{filepath}]".format(
                 filepath=event.src_path))
             q.add(event.src_path)
-            # CheckFile.apply_async(args=[event.src_path])
 
     def on_modified(self, event):
         super(MyFileMonitor, self).on_modified(event)
@@ -39,7 +36,6 @@ class MyFileMonitor(FileSystemEventHandler):
             logger.info("modified name:[{filepath}]".format(
                 filepath=event.src_path))
             q.add(event.src_path)
-            # CheckFile.apply_async(args=[event.src_path])
 
     def on_moved(self, event):
         super(MyFileMonitor, self).on_moved(event)
@@ -47,7 +43,6 @@ class MyFileMonitor(FileSystemEventHandler):
             logger.info("moved name:[{filepath}] to name:[{newfilepath}] ".format(
                 filepath=event.src_path, newfilepath=event.dest_path))
             q.add(event.dest_path)
-            # CheckFile.apply_async(args=[event.dest_path])
 
 
 def createDogService():
