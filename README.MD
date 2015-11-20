@@ -21,16 +21,13 @@
 - 配置环境变量*ENV*，'DEVELOPMENT | TEST | PRODUCTION' 三个值对应三种不同的配置
 - 修改*app/conf.py*,'WATCH_PATH'设置监听的目录,'DB_ENGINE'，数据库连接方式，不同的数据库需要安装不同的包
 
-## 启动
+## 启动(手动)
 - 监听服务 cd app && python dogserver.py
 - 分发调度器 celery beat -A worker.celery
 - 分发程序 celery worker -A worker.celery  -P gevent -c 1000 --loglevel=info -n worker1
 
 
-
 ## 其他
-**监控队列状况**
-celery beat -A worker.celery
 
 **KV**
 redis-server /etc/redis.conf
