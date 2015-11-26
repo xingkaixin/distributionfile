@@ -14,7 +14,8 @@
 - 文件分发规则，配置在APP_FILE_ROUTE中，linux大小写敏感，配置时需注意，配置路径时注意区分相对路径，绝对路径
 - 符合的文件需要按照`APP_FILE_ROUTE.SRC_NAME`_时间戳.`APP_FILE_ROUTE.SRC_EXTENSION`生成，大小写敏感，必须有时间戳，时间戳放在最后一个时间戳后
 
-
+## 配置日期格式
+![](format.png)
 
 
 ## 安装
@@ -68,3 +69,5 @@ dd if=/dev/zero of=1.file bs=1024 count=0 seek=$[1024*1000*3]
 ├── LICENSE
 ├── README.MD
 └── requirements.txt
+
+
