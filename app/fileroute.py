@@ -54,8 +54,8 @@ class FileRoute(object):
                     self.blocked = False
                     self.tar_path = f.tar_path
                     utcdt = arrow.utcnow().to('local')
-                    file_timestamp = f.tar_name.format(YMD=utcdt.format(
-                        'YYYYMMDD'), YM=utcdt.format('YYYYMM'))
+                    file_timestamp = f.tar_name.format(DT=utcdt.format(
+                        f.tar_dt_format))
                     try:
                         file_timestamp = file_timestamp.decode('gbk')
                     except UnicodeDecodeError:

@@ -27,6 +27,7 @@ class FileRouteModule(Base):
     valid_to = Column(DateTime)
     tar_path = Column(String(100))
     tar_name = Column(String(100))
+    tar_dt_format = Column(String(100))
     transtype = Column(String(100))
     ftpname = Column(String(100))
 
