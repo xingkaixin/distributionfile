@@ -42,43 +42,43 @@ from fileroute import FileRoute
 from queueapp import DogQueue
 
 
-@celery.task(name="CheckFile")
-def CheckFile(filepath, filesize=0):
-    return _CheckFile(filepath, filesize)
+# @celery.task(name="CheckFile")
+# def CheckFile(filepath, filesize=0):
+#     return _CheckFile(filepath, filesize)
 
 
-def _CheckFile(filepath, filesize=0):
-    logger.info('Checkfile........')
-    from os.path import getsize
+# def _CheckFile(filepath, filesize=0):
+#     logger.info('Checkfile........')
+#     from os.path import getsize
 
-    newsize = getsize(filepath)
-    logger.info('{filepath} size is {size}'.format(
-        filepath=filepath, size=newsize))
-    if newsize == filesize and newsize > 0:
-        if newsize == 0:
-            return False
-        logger.info('Checkfile is Ok')
-        f = FileRoute(filepath)
-        try:
-            logger.info('Check is is watchfile?')
-            transtype, ftpname, dest_path, filename = f.routeInfo()
-            logger.info('{filepath} is our file'.format(filepath=filepath))
-            q = DogQueue()
-            q.add(filepath)
-            logger.info('{filepath} add into Dogqueue'.format(
-                filepath=filepath))
-            return True
-        except TypeError:
-            logger.info('{filepath} is not our file'.format(filepath=filepath))
-            return False
-        except:
-            logger.exception('_CheckFile')
-            return False
-        # UploadFile.apply_async(args=[filepath])
-    logger.info('Checkfile is not Ok,pending {pendingtime} seconds'.format(
-        pendingtime=conf.PENDING_TIME))
-    time.sleep(conf.PENDING_TIME)
-    return _CheckFile(filepath, newsize)
+#     newsize = getsize(filepath)
+#     logger.info('{filepath} size is {size}'.format(
+#         filepath=filepath, size=newsize))
+#     if newsize == filesize and newsize > 0:
+#         if newsize == 0:
+#             return False
+#         logger.info('Checkfile is Ok')
+#         f = FileRoute(filepath)
+#         try:
+#             logger.info('Check is is watchfile?')
+#             transtype, ftpname, dest_path, filename = f.routeInfo()
+#             logger.info('{filepath} is our file'.format(filepath=filepath))
+#             q = DogQueue()
+#             q.add(filepath)
+#             logger.info('{filepath} add into Dogqueue'.format(
+#                 filepath=filepath))
+#             return True
+#         except TypeError:
+#             logger.info('{filepath} is not our file'.format(filepath=filepath))
+#             return False
+#         except:
+#             logger.exception('_CheckFile')
+#             return False
+#         # UploadFile.apply_async(args=[filepath])
+#     logger.info('Checkfile is not Ok,pending {pendingtime} seconds'.format(
+#         pendingtime=conf.PENDING_TIME))
+#     time.sleep(conf.PENDING_TIME)
+#     return _CheckFile(filepath, newsize)
 
 
 def pendingFile(filepath, filesize=0):

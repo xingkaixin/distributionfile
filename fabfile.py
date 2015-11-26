@@ -10,7 +10,7 @@ env.hosts = ['10.8.4.116']
 
 
 def pack():
-    tar_files = ['*.conf','*.py','requirements.txt']
+    tar_files = ['*.py','requirements.txt']
     tar_files.append('app/*')
     tar_files.append('bin/*.sh')
     local('rm -f www.tar.gz')
