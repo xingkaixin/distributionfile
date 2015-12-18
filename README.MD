@@ -25,7 +25,7 @@
 ## 启动(手动)
 - 监听服务 cd app && python dogserver.py
 - 分发调度器 celery beat -A worker.celery
-- 分发程序 celery worker -A worker.celery  -P gevent -c 1000 --loglevel=info -n worker1
+- 分发程序 celery worker -A worker.celery  -P gevent -c 100 --loglevel=info -n worker1
 
 
 ## 其他
@@ -38,36 +38,5 @@ redis-server /etc/redis.conf
 
 **生成文件**
 dd if=/dev/zero of=1.file bs=1024 count=0 seek=$[1024*1000*3]
-
-
-
-**目录结构**
-├── app
-│   ├── beatjob.py
-│   ├── conf.py
-│   ├── core.py
-│   ├── dogserver.py
-│   ├── fileroute.py
-│   ├── log
-│   │   └── sysout.log
-│   ├── module
-│   │   ├── fileroute.py
-│   │   └── __init__.py
-│   ├── queueapp.py
-│   ├── tools
-│   │   ├── ftptools.py
-│   │   ├── __init__.py
-│   │   └── retools.py
-│   └── worker.py
-├── bin
-│   ├── beat.sh
-│   ├── worker.sh
-│   └── dog.sh
-├── fabfile.py
-├── ftp.conf
-├── ftp.conf.sample
-├── LICENSE
-├── README.MD
-└── requirements.txt
 
 

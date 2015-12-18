@@ -56,8 +56,16 @@ class FileRoute(object):
                     utcdt = arrow.utcnow().to('local')
                     logger.debug(f.tar_name)
                     logger.debug(f.tar_dt_format)
+                    try:
+                        tar_dt_format_list = f.tar_dt_format.split(',')
+                        tar_dt_format = tar_dt_format_list[0]
+                        tar_dt_diff = int(tar_dt_format_list[1])
+                    except ValueError:
+                        tar_dt_diff = 0
+                    except IndexError:
+                        tar_dt_diff = 0
                     file_timestamp = f.tar_name.format(
-                        DT=utcdt.format(f.tar_dt_format))
+                        DT=utcdt.replace(days=tar_dt_diff).format(f.tar_dt_format))
                     try:
                         file_timestamp = file_timestamp.decode('gbk')
                     except UnicodeDecodeError:
