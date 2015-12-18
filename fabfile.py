@@ -10,6 +10,7 @@ env.hosts = ['10.8.4.116']
 
 
 def pack():
+    local('cd bin && dos2unix *.sh')
     tar_files = ['*.py','requirements.txt']
     tar_files.append('app/*')
     tar_files.append('bin/*.sh')
