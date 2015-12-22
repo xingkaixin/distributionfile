@@ -139,6 +139,8 @@ def UploadFile(filepath):
         c = f.get_client(host, port, username, password, key)
 
         local = filepath
+        if dest_path is None:
+            dest_path = ''
         remote = os.path.join(dest_path, filename)
         temp = os.path.join(dest_path, filename + '.transfering')
 
