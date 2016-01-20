@@ -46,9 +46,11 @@ class FileRoute(object):
         if tempate_f:
             try:
                 f = session.query(FileRouteModule).filter(FileRouteModule.src_path == self._p,
-                                                          FileRouteModule.src_name == tempate_f, FileRouteModule.src_extension == self._ext).first()
+                                                          FileRouteModule.src_name == tempate_f).first()
                 logger.debug(f)
                 if f is None:
+                    self.blocked = True
+                elif f and f.src_extension.lower() != self._ext:
                     self.blocked = True
                 else:
                     self.blocked = False
