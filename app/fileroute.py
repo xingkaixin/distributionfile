@@ -50,6 +50,15 @@ class FileRoute(object):
                 logger.debug(f)
                 if f is None:
                     self.blocked = True
+                    _f = session.query(FileRouteModule).filter(FileRouteModule.src_path == self._p,
+                                                               FileRouteModule.src_name == '*', FileRouteModule.src_extension == self._ext).first()
+                    if _f:
+                        self.transtype = _f.transtype
+                        self.ftpname = _f.ftpname
+                        self.tar_path = _f.tar_path
+                        self.tar_name = '{filenme}.{ext}'.format(a
+                                                                 filename=self._f, ext=self._ext)
+                        self.blocked = False
                 elif f and f.src_extension.lower() != self._ext:
                     self.blocked = True
                 else:
