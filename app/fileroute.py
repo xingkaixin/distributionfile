@@ -76,7 +76,7 @@ class FileRoute(object):
                     except IndexError:
                         tar_dt_diff = 0
                     file_timestamp = f.tar_name.format(
-                        DT=utcdt.replace(days=tar_dt_diff).format(f.tar_dt_format))
+                        DT=utcdt.replace(days=tar_dt_diff).format(tar_dt_format))
                     try:
                         file_timestamp = file_timestamp.decode('gbk')
                     except UnicodeDecodeError:
