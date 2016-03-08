@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 import sys
 import re
+from core import logger
 
 default_encoding = 'utf-8'
 if sys.getdefaultencoding() != default_encoding:
@@ -40,7 +41,7 @@ def getKeyName(name):
         match = pattern.match(name)
         if match:
             return match.group()[0:-1]
-        return None
+        return name
     except Exception as e:
-        print e
-        return None
+        logger.excepion('getKeyName')
+        return name
