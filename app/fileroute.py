@@ -63,10 +63,32 @@ class FileRoute(object):
                     self.blocked = True
                 else:
                     self.blocked = False
-                    self.tar_path = f.tar_path
+
                     utcdt = arrow.utcnow().to('local')
+
+                    # 目标目录生成
+                    try:
+                        tar_folder_dt_format_list = f.tar_folder_dt_format.split(
+                            ',')
+                        tar_folder_dt_format = tar_folder_dt_format_list[0]
+                        tar_folder_dt_diff = int(tar_folder_dt_format_list[1])
+                    except ValueError:
+                        tar_folder_dt_diff = 0
+                    except IndexError:
+                        tar_folder_dt_diff = 0
+
+                    if tar_folder_dt_format:
+                        folder_timestamp = f.tar_path.format(DT=utcdt.replace(
+                            days=tar_folder_dt_diff).format(tar_folder_dt_format))
+                    else:
+                        folder_timestamp = f.tar_path
+
+                    self.tar_path = folder_timestamp
+
                     logger.debug(f.tar_name)
                     logger.debug(f.tar_dt_format)
+
+                    # 目标文件名生成
                     try:
                         tar_dt_format_list = f.tar_dt_format.split(',')
                         tar_dt_format = tar_dt_format_list[0]
@@ -84,6 +106,7 @@ class FileRoute(object):
                     logger.debug(file_timestamp)
                     self.tar_name = '{filename}.{ext}'.format(
                         filename=file_timestamp, ext=f.src_extension)
+
                     self.transtype = f.transtype
                     self.ftpname = f.ftpname
             except:
