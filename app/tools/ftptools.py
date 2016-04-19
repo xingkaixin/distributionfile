@@ -100,18 +100,18 @@ class SFTPClient(BaseClient):
         for f in remote_folders:
             if current_sub_folder_num < sub_folders_num:
                 try:
-                    sftp.chdir(f)
+                    self._sftp.chdir(f)
                     cd_num += 1
                 except IOError:
-                    sftp.mkdir(f)
-                    sftp.chdir(f)
+                    self._sftp.mkdir(f)
+                    self._sftp.chdir(f)
                     cd_num += 1
                 current_sub_folder_num += 1
 
         # 返回FTP登录目录
         if cd_num > 0:
             for i in range(cd_num):
-                sftp.chdir('..')
+                self._sftp.chdir('..')
 
         self._sftp.put(local, remote)
 

@@ -56,8 +56,8 @@ class FileRoute(object):
                         self.transtype = _f.transtype
                         self.ftpname = _f.ftpname
                         self.tar_path = _f.tar_path
-                        self.tar_name = '{filenme}.{ext}'.format(a
-                                                                 filename=self._f, ext=self._ext)
+                        self.tar_name = '{filenme}.{ext}'.format(
+                            filename=self._f, ext=self._ext)
                         self.blocked = False
                 elif f and f.src_extension.lower() != self._ext:
                     self.blocked = True
